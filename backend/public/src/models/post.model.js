@@ -21,6 +21,10 @@ const postSchema = new Schema(
            required: true,
            min: 1,
            max: 5
+        },
+        postedBy:{
+            type: Schema.Types.ObjectId,
+            ref: "User"
         }
     },
     {
