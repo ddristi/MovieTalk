@@ -5,12 +5,12 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "nodemon public/src/index.js"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
