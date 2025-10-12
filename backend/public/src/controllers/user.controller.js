@@ -45,10 +45,15 @@ const registerUser = asyncHandler(async(req,res) => {
 
     const profilePhoto = await uploadOnCloudinary(profilePhotoLocalPath)
 
+    const UploadedProfilePhoto ={
+        url:profilePhoto.url,
+        public_id:profilePhoto.public_id
+    }
+
     const user = await User.create({
         username.toLowerCase(),
         fullName,
-        profilePhoto,
+        profilePhoto: UploadedProfilePhoto,
         email,
         password
     })
@@ -170,7 +175,7 @@ const updateProfile = asyncHandler(async(req, res) =>{
     const {fullName,email} = req.body
 
     if(!(fullName|| email)){
-        throw new ApiError(400, "All fields are required")
+        throw new ApiError(400, "Atleast one fields are required")
     }
     
     
