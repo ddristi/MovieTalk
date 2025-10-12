@@ -3,8 +3,9 @@ import Post from "../models/post.model.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import asyncHandler from "../utils/asynchandler.js"
-import mongoose from "mongoose"
+import mongoose, {isValidObjectId} from "mongoose"
 import jwt from "jsonwebtoken"
+
 
 
 const createPost =  asyncHandler(async(req,res) =>{
@@ -94,3 +95,28 @@ const deletePost = asyncHandler(async(req,res) =>{
         new ApiResponse(200, "Post deleted successfully")
     )
 })
+
+const getAllPost = asyncHandler(async(req,res) =>{
+   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
+   
+})
+
+const getPostbyId = asyncHandler(async(req,res) =>{
+
+    const post = await Post.findById(req.params._id)
+
+    if(!post){
+        throw new ApiError(404, "Post not found")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, {post}, "Post fetched successfully"))
+})
+
+export {createPost,
+        updatePost,
+        deletePost,
+        getAllPost,
+        getPostbyId
+}
