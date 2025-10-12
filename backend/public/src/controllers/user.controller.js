@@ -172,12 +172,13 @@ const updateProfile = asyncHandler(async(req, res) =>{
     if(!(fullName|| email)){
         throw new ApiError(400, "All fields are required")
     }
-
+    
+    
     const user = await User.findByIdAndUpdate(
         req.user?_id,
         {
             $set:{
-                fullName,
+                fullName: req.user?.fullName,
                 email: email
             }
         },
@@ -190,4 +191,116 @@ const updateProfile = asyncHandler(async(req, res) =>{
     .status(200)
     .json(new ApiResponse(200, user, "Account details updated successfully"))
 })
+
+const updateProfilePhoto = asyncHandler(async(req,res) =>{
+
+     const profilePhotoPath =req.file?.path;
+
+     const user = await User.findById(req.user?._id)
+
+     if(!user){
+        throw new ApiError(404, "User not found")
+     }
+
+     if(user.profilePhoto?.public_id){
+        try {
+           await cloudinary.uploader.destroy(user.profilePhoto.public_id) 
+        } catch (error) {
+           throw new ApiError(400, "Error deleting old image") 
+        }
+     }
+     
+     if(!profilePhotoPath){
+        throw new ApiError(400, "Upload the new Profile photo")
+     }
+     const updatedProfilePhoto = await uploadOnCloudinary(profilePhotoPath)
+
+     const updatedUser = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+         
+         $set:{
+            profilePhoto: {
+                url:updatedProfilePhoto.url,
+                public_id: updatedProfilePhoto.public_id
+
+            }
+        }
+         
+        },
+        {
+            new: true
+        }
+     ).select("-password")
+
+
+     return res
+     .status(200)
+     .json(
+        new ApiResponse(200, updatedUser, "Profile Photo updated successfully")
+     )
+})
+
+const getPost = asyncHandler(async(req,res) => {
+    const {username} = req.params
+
+    if(!username?.trim()){
+        throw new ApiError(400, "username is missing")
+    }
+    const post = await User.aggregate([
+
+        {
+            $match: {
+                username: username?.toLowerCase()
+            }
+        },
+        {
+            $lookup: {
+                from: "posts",
+                localField: "_id",
+                foreignField: "postedBy",
+                as: "posts"
+            }
+        },
+        {
+            $addFields:{
+                postCount:{
+                    $size: "$posts"
+                }
+            }
+        },
+        {
+            $project:{
+                fullName:1,
+                username:1,
+                postCount:1,
+                profilePhoto:1,
+                email:1,
+                posts:1
+            }
+        }
+    ])
+
+    if(!post?.length){
+        throw new ApiError(404, "User or Posts not found")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, post[0], "Posts fetched successfully")
+    )
+})
+
+export {registerUser,
+        loginUser,
+        logoutUser,
+        updatePassword,
+        updateProfile,
+        getUser,
+        getPost,
+        updateProfilePhoto
+}
+
+ 
 
