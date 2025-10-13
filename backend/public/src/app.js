@@ -18,5 +18,9 @@ app.use(express.urlencoded({
 app.use{express.static("public")}
 app.use(cookieParser())
 
+import postRouter from "./routes/post.routes.js"
+import userRouter from "./routes/user.routes.js"
 
+app.use("/api/v1/user", userRouter)
+app.use("/api/v1/posts", postRouter)
 export {app}

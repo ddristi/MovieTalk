@@ -20,3 +20,5 @@ router.route("/post/:id")
 .get(getPostbyId)
 .delete(deletePost)
 .patch(upload.single("movieImage"),updatePost)
+
+export default router

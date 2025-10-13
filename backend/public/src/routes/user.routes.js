@@ -15,10 +15,10 @@ import {verifyJWT} from "../middlewars/auth.middleware.js"
 const router = Router()
 
 router.route("/register").post(
-    upload.fields({
+    upload.single(
         name:"profiilePhoto",
         maxCount: 1
-    }),
+    ),
     registerUser
 )
 
@@ -33,3 +33,5 @@ router.route("/c/:username").get(verifyJWT,getPost)
 router.route("current-user").get(verifyJWT,getUser)
 
 router.route("profile-photo").patch(verifyJWT, upload.single("profilePhoto"), updateProfilePhoto)
+
+export default router
