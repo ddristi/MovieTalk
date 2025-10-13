@@ -50,16 +50,26 @@ const updatePost = asyncHandler(async(req,res) =>{
     if(!description) {
       throw new ApiError(400, "No change in description")
     }
+    const postId = req.params.id
 
-    const post = await Post.findByIdAndUpdate({
-        req.post?._id,
+    const post = await Post.findById(postId)
+
+    if(post.postedBy.toString() !== req.user._id.toString()){
+        throw new ApiError(403, "Unauthorized Access")
+    }
+    const updatedPost = await Post.findByIdAndUpdate(
+        postId,
         {
             $set:{description}
         },
         {
             new:true
         }
-    })
+    )
+
+    if(!updatedPost){
+        throw new ApiError(400, "Something went wrong while updating the post")
+    }
 
     return res
     .status(200)
@@ -69,7 +79,13 @@ const updatePost = asyncHandler(async(req,res) =>{
 })
 
 const deletePost = asyncHandler(async(req,res) =>{
-    const post = await Post.findById(req.params._id)
+    const post = await Post.findById(req.params.id)
+    
+    
+    if(post.postedBy.toString() !== req.user._id.toString()){
+        throw new ApiError(403, "Unauthorized Access")
+    }
+
 
     if(!post){
         throw new ApiError(404, "Post not found")
@@ -97,8 +113,55 @@ const deletePost = asyncHandler(async(req,res) =>{
 })
 
 const getAllPost = asyncHandler(async(req,res) =>{
-   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
+   const { page = 1, limit = 10, query = " ", sortBy = "createdAt", sortType = "desc", userId } = req.query
    
+   page = parseInt(page)
+   limit = parseInt(limit)
+
+   const skip = (page-1) * limit;
+   
+   const filter = {}
+
+   if(query){
+    filter.$or =[
+        {title: {$regex:query, $options:"i"}},
+        { description: { $regex: query, $options: "i" } }
+    ]
+   }
+
+   if(userId){
+    filter.user(userId)
+   }
+
+   const sort = {}
+   sort[sortBy] = sortType === "asc"? 1: -1;
+
+   const totalPosts = await Post.countDocuments(filter);
+
+   if(skip >= totalPosts && totalPosts > 0){
+    throw new ApiError(400, "No more posts")
+   }
+
+   const posts = await Post.find(filter)
+                           .populate("user", "username profilePhoto")
+                           .sort(sort)
+                           .skip(skip)
+                           .limit(limit)
+
+   return res
+    .status(200)
+    .json(
+      new ApiResponse(200, 
+        {
+          total: totalPosts,
+          page,
+          limit,
+          posts
+        },
+        "Posts fetched successfully"
+      )
+    )
+
 })
 
 const getPostbyId = asyncHandler(async(req,res) =>{

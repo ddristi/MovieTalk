@@ -16,7 +16,7 @@ router.route("/")
     name: "movieImage",
     maxCount: 1
 }), createPost)
-router.route("/:postId")
+router.route("/post/:id")
 .get(getPostbyId)
 .delete(deletePost)
 .patch(upload.single("movieImage"),updatePost)
