@@ -1,9 +1,9 @@
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
-import User from "../models/user.model.js"
+import {User} from "../models/user.model.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
-import asyncHandler from "../utils/asynchandler.js"
+import {asyncHandler} from "../utils/asynchandler.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 
 const generateAccessTokenAndRefreshToken = async(userId) =>{
@@ -25,7 +25,7 @@ const registerUser = asyncHandler(async(req,res) => {
 
     const {fullName, email, password, username} = req.body;
 
-    if([fullName,email,password,username].some((fields) => fields?.trim ===() "")){
+    if([fullName,email,password,username].some((fields) => fields?.trim() === "")){
         throw new ApiError(400, "All fields are required")
     }
 
@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async(req,res) => {
     }
 
     const user = await User.create({
-        username.toLowerCase(),
+        username,
         fullName,
         profilePhoto: UploadedProfilePhoto,
         email,
@@ -76,9 +76,9 @@ const registerUser = asyncHandler(async(req,res) => {
 const loginUser = asyncHandler(async(req,res) =>{
     const {username,email, password} = req.body
 
-    if(!(username || email){
+    if(!(username || email)){
         throw new ApiError(400, "username or email is required")
-    })
+    }
 
     const user = await User.findOne({
         $or:[{username},{email}]
@@ -166,9 +166,9 @@ const updatePassword = asyncHandler(async(req,res) =>{
 const getUser = asyncHandler(async(req,res) =>{
     return res
     .status(200)
-    .json{
-        new ApiResponse(200, req.user, "User fetched Successfully")
-    }
+    .json(new ApiResponse(200, req.user, "User fetched Successfully"))
+        
+    
 })
 
 const updateProfile = asyncHandler(async(req, res) =>{
@@ -180,7 +180,7 @@ const updateProfile = asyncHandler(async(req, res) =>{
     
     
     const user = await User.findByIdAndUpdate(
-        req.user?_id,
+        req.user?._id,
         {
             $set:{
                 fullName: req.user?.fullName,

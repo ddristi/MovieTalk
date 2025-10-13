@@ -1,8 +1,8 @@
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
-import Post from "../models/post.model.js"
+import {Post} from "../models/post.model.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
-import asyncHandler from "../utils/asynchandler.js"
+import {asyncHandler} from "../utils/asynchandler.js"
 import mongoose, {isValidObjectId} from "mongoose"
 import jwt from "jsonwebtoken"
 

@@ -1,4 +1,4 @@
-import import {upload} from "../middlewars/multer.middleware.js"
+import {upload} from "../middlewars/multer.middleware.js"
 import {verifyJWT} from "../middlewars/auth.middleware.js"
 import {Router} from "express"
 import {createPost,
