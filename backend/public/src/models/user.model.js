@@ -23,9 +23,9 @@ const userSchema = new Schema(
         type: String,
         required:[true, "Password is required"]
     },
-    profilePhoto:{
-        type: String, // url
-        required: true
+    profilePhoto: {
+        url: { type: String, required: true },
+        public_id: { type: String }
     },
     fullName:{
         type:String,
