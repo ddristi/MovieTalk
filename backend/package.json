@@ -7,7 +7,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon public/src/index.js"
+    "start": "nodemon -r public/src/index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

@@ -46,7 +46,7 @@ const registerUser = asyncHandler(async(req,res) => {
     const profilePhoto = await uploadOnCloudinary(profilePhotoLocalPath)
 
     const UploadedProfilePhoto ={
-        url:profilePhoto.url,
+        url:profilePhoto.secure_url,
         public_id:profilePhoto.public_id
     }
 
