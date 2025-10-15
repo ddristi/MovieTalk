@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 
 
 // manually load the root .env
-const envPath = path.resolve(__dirname, "../../../.env");
+const envPath = path.resolve(__dirname, "]789**+../../.env");
 const result = dotenv.config({ path: envPath, override: true });
 
 if (result.error) {
@@ -25,7 +25,7 @@ if (result.error) {
 // quick debug
 console.log("MONGODB_URI =", process.env.MONGODB_URI);
 
-dotenv.config()
+//dotenv.config()
 
 console.log("✅ Loaded MONGODB_URI:", process.env.MONGODB_URI);
 
