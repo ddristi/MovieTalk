@@ -9,13 +9,13 @@ import {uploadOnCloudinary} from "../utils/cloudinary.js"
 const generateAccessTokenAndRefreshToken = async(userId) =>{
     try {
         const user= await User.findById(userId)
-        const accesstoken = user.generateAccessToken()
-        const refreshtoken = user.generateRefreshToken()
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
 
-        user.refreshToken = refreshtoken
+        user.refreshToken = refreshToken
         await user.save({validateBeforeSave:false})
 
-        return {accesstoken, refreshtoken}
+        return {accessToken, refreshToken}
     } catch (error) {
         throw new ApiError(500, "Something went wrong while generating tokens")
     }
@@ -84,23 +84,23 @@ const loginUser = asyncHandler(async(req,res) =>{
         $or:[{username},{email}]
     })
 
-    const isPasswordValid = await User.isPasswordCorrect(password)
+    const isPasswordValid = await user.isPasswordCorrect(password)
 
     if (!isPasswordValid) {
     throw new ApiError(401, "Invalid Password")
     }
 
     const {accessToken, refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
-    const loggedinUser = await User.findById(user._id).select("-password -refreshToken")
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
         httpOnly:true,
-        secure:true
+        secure:false
     }
 
     return res
     .status(200)
-    .cookie("accesstoken", accessToken, options)
+    .cookie("accessToken", accessToken, options)
     .cookie("refreshToken",refreshToken,options)
     .json(
         new ApiResponse(
@@ -128,13 +128,13 @@ const logoutUser = asyncHandler(async(req,res)=>{
 
     const options = {
         httpOnly:true,
-        secure:true
+        secure:false
     }
 
     return res
     .status(200)
-    .clearCookie(accessToken,options)
-    .clearCookie(refreshToken,options)
+    .clearCookie("accessToken",options)
+    .clearCookie("refreshToken",options)
     .json(
         new ApiResponse(
             200,
@@ -148,6 +148,14 @@ const updatePassword = asyncHandler(async(req,res) =>{
     const {oldPassword,newPassword} = req.body
     
     const user = await User.findById(req.user?._id)
+
+   console.log("user:", user);
+   console.log("user.password:", user.password);
+
+
+    if (!user.password) {
+        throw new ApiError(400, "Password not set for this user");
+    }
     const isCorrect = await user.isPasswordCorrect(oldPassword)
 
     if(!isCorrect){
@@ -155,7 +163,7 @@ const updatePassword = asyncHandler(async(req,res) =>{
     }
 
     user.password = newPassword
-    await user.save({validateBeforeSave:false})
+    await user.save()
 
     return res
     .status(200)
@@ -177,8 +185,20 @@ const updateProfile = asyncHandler(async(req, res) =>{
     if(!(fullName|| email)){
         throw new ApiError(400, "Atleast one fields are required")
     }
-    
-    
+    if(email){    
+        const existingUser = await User.findOne(
+        {
+            email
+        }
+    )
+        
+    if(existingUser){
+        throw new ApiError(400,"Email already exists")
+    }
+
+}
+
+
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
@@ -198,10 +218,14 @@ const updateProfile = asyncHandler(async(req, res) =>{
 })
 
 const updateProfilePhoto = asyncHandler(async(req,res) =>{
+     
+    console.log("Update profile photo endpoint hit");
 
      const profilePhotoPath =req.file?.path;
 
      const user = await User.findById(req.user?._id)
+     console.log(user?.profilePhoto.public_id);
+     
 
      if(!user){
         throw new ApiError(404, "User not found")
@@ -211,6 +235,7 @@ const updateProfilePhoto = asyncHandler(async(req,res) =>{
         try {
            await cloudinary.uploader.destroy(user.profilePhoto.public_id) 
         } catch (error) {
+        console.log( error.message);
            throw new ApiError(400, "Error deleting old image") 
         }
      }
@@ -226,7 +251,7 @@ const updateProfilePhoto = asyncHandler(async(req,res) =>{
          
          $set:{
             profilePhoto: {
-                url:updatedProfilePhoto.url,
+                url:updatedProfilePhoto.secure_url,
                 public_id: updatedProfilePhoto.public_id
 
             }

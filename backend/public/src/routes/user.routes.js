@@ -26,11 +26,11 @@ router.route("/login").post(loginUser)
 router.route("/logout").post(verifyJWT,  logoutUser)
 //router.route("/refresh-token").post(refreshAccessToken)
 
-router.route("change-password").post(verifyJWT, updatePassword)
-router.route("update-profile").patch(verifyJWT, updateProfile)
+router.route("/change-password").patch(verifyJWT, updatePassword)
+router.route("/update-profile").patch(verifyJWT, updateProfile)
 router.route("/c/:username").get(verifyJWT,getPost)
-router.route("current-user").get(verifyJWT,getUser)
+router.route("/current-user").get(verifyJWT,getUser)
 
-router.route("profile-photo").patch(verifyJWT, upload.single("profilePhoto"), updateProfilePhoto)
+router.route("/profile-photo").patch(verifyJWT, upload.single("profilePhoto"), updateProfilePhoto)
 
 export default router
