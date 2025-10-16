@@ -224,6 +224,8 @@ const updateProfilePhoto = asyncHandler(async(req,res) =>{
      const profilePhotoPath =req.file?.path;
 
      const user = await User.findById(req.user?._id)
+     console.log(req.user);
+     
      console.log(user?.profilePhoto.public_id);
      
 
@@ -240,6 +242,16 @@ const updateProfilePhoto = asyncHandler(async(req,res) =>{
         }
      }
      
+        // Safe deletion
+    // if (user.profilePhoto?.public_id) {
+    //     try {
+    //         console.log("Deleting old profile photo:", user.profilePhoto.public_id);
+    //         await cloudinary.uploader.destroy(user.profilePhoto.public_id);
+    //     } catch (err) {
+    //         console.error("Cloudinary deletion error:", err.message);
+    //         // do not block update
+    //     }
+    // }
      if(!profilePhotoPath){
         throw new ApiError(400, "Upload the new Profile photo")
      }
@@ -281,7 +293,7 @@ const getPost = asyncHandler(async(req,res) => {
 
         {
             $match: {
-                username: username?.toLowerCase()
+                username: { $regex: `^${username}$`, $options: "i" }
             }
         },
         {

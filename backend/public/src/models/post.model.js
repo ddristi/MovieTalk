@@ -8,7 +8,7 @@ const postSchema = new Schema(
            trim: true
         },
         movieImage:{
-           type: String,
+           type: Object,
            required: true,
         },
         description:{

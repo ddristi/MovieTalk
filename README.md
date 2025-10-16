@@ -7,3 +7,6 @@ for User document the methods of schema should be applied in the user variable w
 3=> In "start" script always write "nodemon -r/dotenv/config" then the path of entry point file like index.js
 
 4=> maintain variable naming consistency to avoid silly errors
+
+5=> remember to check what data to input in postman for testing
+6=> add console log in middlewars for checkinguploads

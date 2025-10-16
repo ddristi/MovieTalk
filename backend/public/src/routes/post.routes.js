@@ -10,15 +10,11 @@ import {createPost,
 
 const router = Router()
 router.use(verifyJWT)
-router.route("/")
-.get(getAllPost)
-.post(upload.fields({
-    name: "movieImage",
-    maxCount: 1
-}), createPost)
-router.route("/post/:id")
-.get(getPostbyId)
-.delete(deletePost)
-.patch(upload.single("movieImage"),updatePost)
+router.route("/create-post").post(upload.single("movieImage"), createPost)
+router.route("/get-post").get(getAllPost)
+
+router.route("/post/:id").get(getPostbyId)
+router.route("/post/:id/delete-post").delete(deletePost)
+router.route("/post/:id/update-post").patch(updatePost)
 
 export default router

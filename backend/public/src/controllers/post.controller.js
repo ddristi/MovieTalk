@@ -16,20 +16,21 @@ const createPost =  asyncHandler(async(req,res) =>{
         throw new ApiError(400, "All fields are required")
     }
     
-    const imageLocalPath = req.files?.image[0]?.path
+    const imageLocalPath = req.file?.path
 
     const movieImagePath = await uploadOnCloudinary(imageLocalPath)
 
     const movieImage = {
-        url:movieImagePath.url,
+        url:movieImagePath.secure_url,
         public_id: movieImagePath.public_id
     }
 
-    const post = Post.create({
+    const post = await Post.create({
         title,
-        deescription,
+        description,
         rating,
-        movieImage : movieImage
+        movieImage : movieImage,
+        postedBy:req.user?._id
     })
 
     const createdPost = await Post.findById(post._id)
@@ -40,7 +41,7 @@ const createPost =  asyncHandler(async(req,res) =>{
 
     return res
     .status(200)
-    .json( new ApiResponse(200, "Posted successfully"))
+    .json( new ApiResponse(200,createdPost, "Posted successfully"))
 
 })
 
@@ -48,11 +49,15 @@ const updatePost = asyncHandler(async(req,res) =>{
     const {description} = req.body;
 
     if(!description) {
-      throw new ApiError(400, "No change in description")
+      throw new ApiError(400, "No description found")
     }
     const postId = req.params.id
 
     const post = await Post.findById(postId)
+
+    if(!post){
+        throw new ApiError(403,"Post not found")
+    }
 
     if(post.postedBy.toString() !== req.user._id.toString()){
         throw new ApiError(403, "Unauthorized Access")
@@ -113,7 +118,7 @@ const deletePost = asyncHandler(async(req,res) =>{
 })
 
 const getAllPost = asyncHandler(async(req,res) =>{
-   const { page = 1, limit = 10, query = " ", sortBy = "createdAt", sortType = "desc", userId } = req.query
+   let { page = 1, limit = 10, query = "", sortBy = "createdAt", sortType = "desc", userId } = req.query
    
    page = parseInt(page)
    limit = parseInt(limit)
@@ -130,7 +135,7 @@ const getAllPost = asyncHandler(async(req,res) =>{
    }
 
    if(userId){
-    filter.user(userId)
+    filter.user=userId
    }
 
    const sort = {}
@@ -143,7 +148,7 @@ const getAllPost = asyncHandler(async(req,res) =>{
    }
 
    const posts = await Post.find(filter)
-                           .populate("user", "username profilePhoto")
+                           .populate("postedBy", "username profilePhoto")
                            .sort(sort)
                            .skip(skip)
                            .limit(limit)
@@ -166,7 +171,7 @@ const getAllPost = asyncHandler(async(req,res) =>{
 
 const getPostbyId = asyncHandler(async(req,res) =>{
 
-    const post = await Post.findById(req.params._id)
+    const post = await Post.findById(req.params.id)
 
     if(!post){
         throw new ApiError(404, "Post not found")
