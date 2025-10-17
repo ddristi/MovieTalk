@@ -28,7 +28,7 @@
 <body class="font-sans" class="min-h-screen" style="background:#2E1A47">
 
         <!-- Navbar -->
-         <nav id="navbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
+         <nav id="defaultNavbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
             <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
                 <a href="#" class="flex items-center space-x-2">
                     <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" class="w-8 h-8">
@@ -42,11 +42,11 @@
                     </a>
 
                 </div>
-                <button id="mobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
+                <button id="defaultMobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
             </div>
         
            <!-- Mobile Menu -->
-             <div id="mobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
+             <div id="defaultMobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
                 <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
                 <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
                 <button class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 w-full text-left">Login /
@@ -54,44 +54,50 @@
             </div>
         </nav>  
 
-        <!-- Logged-in Navbar
-        <nav id="navbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
+        <script>
+                    const defaultbutton = document.getElementById('defaultMobileMenuButton');
+                    const defaultmenu = document.getElementById('defaultMobileMenu');
+                    defaultbutton.addEventListener('click', () => {
+                        defaultmenu.classList.toggle('hidden');
+                    });
+        </script>
+
+        <!-- Logged-in Navbar -->
+        <nav id="loggedInNavbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300" style="display:none;">
             <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
-                <!-- Logo -->
-                <!-- <a href="#" class="flex items-center space-x-2">
+                 <a href="#" class="flex items-center space-x-2">
                     <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" class="w-8 h-8">
                     <span class="font-bold text-black">MovieTalk</span>
                 </a>
-         -->
+         
                 <!-- Desktop Menu -->
-                <!-- <div class="hidden lg:flex items-center space-x-4">
+                    <div class="hidden lg:flex items-center space-x-4">
                     <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                    <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a> -->
+                    <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a> 
         
-                    <!-- Profile Avatar -->
-                    <!-- <div class="relative">
+                    <!-- Profile Photo -->
+                     <div class="relative">
                         <button id="profileButton"
                             class="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 focus:outline-none">
                             <img src="https://i.pravatar.cc/100?img=12" alt="Profile" class="w-full h-full object-cover">
                         </button>
          
                         <!-- Dropdown Menu -->
-                        <!-- <div id="profileDropdown"
+                         <div id="profileDropdown"
                             class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                             <a href="/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
-                            <a href="/settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
                             <hr class="border-gray-200">
                             <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
                         </div>
                     </div>
                 </div>
-          --> 
+          
                 <!-- Mobile Menu Button -->
-                <!-- <button id="mobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
+                 <button id="loggedInMobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
             </div>
         
             <!-- Mobile Menu -->
-            <!-- <div id="mobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
+             <div id="loggedInMobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
                 <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
                 <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
                 <div class="flex items-center space-x-2 px-3 py-2 border-t border-gray-200 mt-2">
@@ -101,39 +107,66 @@
                 <a href="/settings" class="px-3 py-2 rounded hover:bg-gray-200">Settings</a>
                 <a href="/logout" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
             </div>
-        </nav> --> 
+        </nav>  
         
-        <!-- <script>
+         <script>
             // Mobile menu toggle
-            const button = document.getElementById('mobileMenuButton');
-            const menu = document.getElementById('mobileMenu');
+            const button = document.getElementById('loggedInMobileMenuButton');
+            const menu = document.getElementById('loggedInMobileMenu');
             button.addEventListener('click', () => {
-                menu.classList.toggle('hidden'); -->
-        <!-- //     });
+                menu.classList.toggle('hidden'); 
+              });
 
-        //     // Profile dropdown toggle
-        //     const profileButton = document.getElementById('profileButton');
-        //     const profileDropdown = document.getElementById('profileDropdown');
-        //     profileButton.addEventListener('click', () => {
-        //         profileDropdown.classList.toggle('hidden');
-        //     });
-
-        //     // Close dropdown if clicked outside
-        //     document.addEventListener('click', (e) => {
-        //         if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
-        //             profileDropdown.classList.add('hidden');
-        //         }
-        //     });
-        // </script> -->
-
-    
-        <script>
-            const button = document.getElementById('mobileMenuButton');
-            const menu = document.getElementById('mobileMenu');
-            button.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
+            // Profile dropdown toggle
+            const profileButton = document.getElementById('profileButton');
+            const profileDropdown = document.getElementById('profileDropdown');
+            profileButton.addEventListener('click', () => {
+                profileDropdown.classList.toggle('hidden');
             });
-        </script> 
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (e) => {
+                if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+         </script> 
+           <script>
+            document.addEventListener("DOMContentLoaded", async () =>{
+                const defaultNavbar = document.getElementById("defaultNavbar");
+                const loggedInNavbar = document.getElementById("loggedInNavbar");
+                const profilePhoto = document.querySelector("#profileButton img")
+
+                let user = null;
+
+                 try {
+                    const response = await fetch("http://localhost:3000/api/v1/user/current-user", {
+                    method: "GET",
+                    credentials: "include", 
+                     });
+
+                    
+                     if (!response.ok) throw new Error("Failed to fetch user");
+
+                     const result = await response.json();
+                     user = result.data;
+
+                     if(user){
+                        defaultNavbar.style.display = "none";
+                        loggedInNavbar.style.display = "block";
+
+                        profilePhoto.src = user.profilePhoto.url || "https://i.pravatar.cc/100?img=12";
+
+
+                 }} catch (error) {
+                    console.log("Error fetching user", error);
+                    
+                 } 
+                
+            })
+           </script> 
+
+ 
 
 
     <div id="content">
