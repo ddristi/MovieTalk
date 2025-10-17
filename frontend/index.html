@@ -32,9 +32,46 @@
 
 <body class="bg-gray-100 font-sans">
 
-    <header class="bg-primary text-white p-4 text-center text-2xl font-bold">
+    <!-- <header class="bg-primary text-white p-4 text-center text-2xl font-bold">
         MovieTalk
-    </header>
+    </header> -->
+    
+        <!-- Navbar -->
+        <nav id="navbar"
+            class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
+            <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
+                <a href="#" class="flex items-center space-x-2">
+                    <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" class="w-8 h-8">
+                    <span class="font-bold text-black">Startup</span>
+                </a>
+                <div class="hidden lg:flex space-x-4">
+                    <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
+                    <a href="/movies" class="px-3 py-2 rounded hover:bg-gray-200">Movies</a>
+                    <a href="/profile" class="px-3 py-2 rounded hover:bg-gray-200">Profile</a>
+                </div>
+                <button id="mobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
+            </div>
+    
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
+                <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
+                <a href="/movies" class="px-3 py-2 rounded hover:bg-gray-200">Movies</a>
+                <a href="/profile" class="px-3 py-2 rounded hover:bg-gray-200">Profile</a>
+            </div>
+        </nav>
+    
+        <script>
+            const button = document.getElementById('mobileMenuButton');
+            const menu = document.getElementById('mobileMenu');
+            button.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        </script>
+    
+    </body>
+    
+    </html>
+
 
     <main class="p-6">
         <h1 class="text-4xl font-bold text-center mt-10">Discover what others are watching</h1>

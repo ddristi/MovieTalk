@@ -35,10 +35,11 @@ connectDB()
 
   app.listen(port, ()=>{
     console.log(`Server is running at port: ${process.env.PORT}`);
+    console.log(`http://localhost:${process.env.PORT}`);
+    
     
   })
 })
 .catch((error)=>{
   console.log("MONGODB connection failed!!!",error);
-  
 })
