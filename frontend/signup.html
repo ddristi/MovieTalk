@@ -12,7 +12,7 @@
     <div class="w-full max-w-md bg-white rounded-2xl shadow-md border border-gray-200 p-6">
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Create Account</h2>
 
-        <form>
+        <form id="signupForm">
             <!-- Full Name -->
             <div class="mb-4">
                 <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">
@@ -43,12 +43,12 @@
                     required />
             </div>
 
-            <!-- Avatar Upload -->
+            <!-- profilePhoto Upload -->
             <div class="mb-4">
                 <label for="avatar" class="block text-sm font-medium text-gray-700 mb-1">
                     Profile Photo (Avatar)
                 </label>
-                <input type="file" id="avatar" name="avatar" accept="image/*"
+                <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*"
                     class="w-full text-gray-700 text-sm border border-gray-300 rounded-lg p-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
             </div>
 
@@ -77,6 +77,41 @@
             </p>
         </div>
     </div>
+
+    
+        <script>
+                const form = document.getElementById("signupForm");
+
+  form.addEventListener("submit", async (e) => {
+                    e.preventDefault(); // prevent page reload
+
+                // Collect form data
+                const formData = new FormData(form); // automatically collects inputs + file
+
+                try {
+      const response = await fetch("http://localhost:3000/api/v1/user/register", {
+                    method: "POST",
+                    body: formData, // no need to set headers for multipart/form-data
+      });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    alert(result.message || "Registration failed!");
+                return;
+                }
+
+                alert("Account created successfully!");
+                // Redirect to login page or homepage
+                window.location.href = "login.html";
+    } catch (error) {
+                    console.error("Error:", error);
+                alert("Something went wrong!");
+    }
+  });
+        </script>
+
+    
 </body>
 
 </html>
