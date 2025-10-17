@@ -178,10 +178,10 @@
             </p>
         </main>
 
-    
-        <div class="max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6">
+        <div id="card">
+        <!-- <div class="max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6"> -->
             <!-- Header -->
-            <div class="flex items-center justify-between p-4">
+          <!--- <div class="flex items-center justify-between p-4">
                 <div class="flex items-center space-x-3">
                     <img src="https://i.pravatar.cc/100?img=8" alt="Profile" class="w-10 h-10 rounded-full object-cover" />
                     <div>
@@ -190,22 +190,22 @@
                     </div>
                 </div>
                 <p class="text-xs text-gray-500">2h ago</p>
-            </div>
+            </div> -->
     
             <!-- Post Image -->
-            <div>
+            <!-- <div>
                 <img src="https://images.unsplash.com/photo-1606112219348-204d7d8b94ee" alt="Post"
                     class="w-full h-64 object-cover" />
-            </div>
+            </div> -->
     
             <!-- Post Content -->
-            <div class="p-4">
-                <h2 class="text-lg font-bold text-gray-800 mb-2">Inception (2010)</h2>
+            <!-- <div class="p-4">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">Inception (2010)</h2> -->
     
                 <!-- Rating -->
-                <div class="flex items-center mb-3">
+                <!-- <div class="flex items-center mb-3"> -->
                     <!-- 4 out of 5 stars example -->
-                    <div class="flex text-yellow-400 text-lg">
+                    <!-- <div class="flex text-yellow-400 text-lg">
                         ★★★★☆
                     </div>
                     <span class="text-sm text-gray-600 ml-2">4.0 / 5</span>
@@ -215,13 +215,75 @@
                     A thrilling sci-fi movie that explores dreams within dreams. Must watch!
                 </p>
             </div>
-        </div>
+        </div> -->
     
-    
+    </div>
     
     </div>
 
+   <script>
 
+    document.addEventListener("DOMContentLoaded", async() =>{
+        const cardDiv = document.getElementById("card")
+
+        try {
+            const response = await fetch("http://localhost:3000/api/v1/posts/get-post",{
+                method: "GET",
+                credentials: "include"
+            })
+
+            if(!response.ok){
+                throw new Error("Failed to fetch posts")
+            }
+
+            const result = await response.json()
+            const posts = result.data.posts
+
+            cardDiv.innerHTML = ""
+
+            posts.forEach((post) =>{
+                     const card = document.createElement("div");
+                card.className =
+                    "max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6";
+
+                card.innerHTML = `
+        <div class="flex items-center justify-between p-4">
+          <div class="flex items-center space-x-3">
+            <img src="${post.postedBy?.profilePhoto?.url || 'https://i.pravatar.cc/100'}" 
+                 alt="Profile" class="w-10 h-10 rounded-full object-cover" />
+            <div>
+              <h3 class="text-sm font-semibold text-gray-800">${post.postedBy?.username || "Unknown"}</h3>
+              <p class="text-xs text-gray-500">@${post.owner?.username || "user"}</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500">${new Date(post.createdAt).toLocaleDateString()}</p>
+        </div>
+
+        <div>
+          <img src="${post.movieImage.url}" alt="Post" class="w-full h-64 object-cover" />
+        </div>
+
+        <div class="p-4">
+          <h2 class="text-lg font-bold text-gray-800 mb-2">${post.title}</h2>
+
+          <div class="flex items-center mb-3 text-yellow-400 text-lg">
+            ${"★".repeat(post.rating)}${"☆".repeat(5 - post.rating)}
+            <span class="text-sm text-gray-600 ml-2">${post.rating}.0 / 5</span>
+          </div>
+
+          <p class="text-sm text-gray-600">${post.description}</p>
+        </div>
+      `;
+
+                cardDiv.appendChild(card);
+            }); 
+            
+        } catch (error) {
+               console.error("Error fetching posts:", error);
+            cardDiv.innerHTML = `<p class="text-center text-white mt-10">Failed to load posts.</p>`;   
+        }
+    })
+   </script>
 
     <script src="./src/script.js"></script>
 </body>
