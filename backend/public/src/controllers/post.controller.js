@@ -5,7 +5,7 @@ import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asynchandler.js"
 import mongoose, {isValidObjectId} from "mongoose"
 import jwt from "jsonwebtoken"
-
+import {v2 as cloudinary} from "cloudinary"
 
 
 const createPost =  asyncHandler(async(req,res) =>{
@@ -84,6 +84,7 @@ const updatePost = asyncHandler(async(req,res) =>{
 })
 
 const deletePost = asyncHandler(async(req,res) =>{
+
     const post = await Post.findById(req.params.id)
     
     

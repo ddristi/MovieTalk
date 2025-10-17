@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
 import {asyncHandler} from "../utils/asynchandler.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import {v2 as cloudinary} from "cloudinary"
 
 const generateAccessTokenAndRefreshToken = async(userId) =>{
     try {
