@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="./src/styles.css">
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body class="bg- font-sans">
 
         <!-- Navbar -->
          <nav id="navbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
@@ -106,7 +106,7 @@
             const menu = document.getElementById('mobileMenu');
             button.addEventListener('click', () => {
                 menu.classList.toggle('hidden'); -->
-        //     });
+        <!-- //     });
 
         //     // Profile dropdown toggle
         //     const profileButton = document.getElementById('profileButton');
@@ -121,7 +121,7 @@
         //             profileDropdown.classList.add('hidden');
         //         }
         //     });
-        // </script>
+        // </script> -->
 
     
         <script>
@@ -130,46 +130,60 @@
             button.addEventListener('click', () => {
                 menu.classList.toggle('hidden');
             });
-        </script> -->
+        </script> 
 
 
-    <main class="p-6">
-        <h1 class="text-4xl font-bold text-center mt-10">Discover what others are watching</h1>
-        <p class="mt-4 text-center text-gray-700">
-            Join our community of movie lovers.Share your thoughts,discover new favourites, and connect with fellow cinephiles.
-        </p>
-    </main>
-
-    <div class="min-h-screen bg-gray-50 flex flex-col items-center p-4">
-        <!-- Post 1 -->
-        <!-- (paste the card above here) -->
+    <div id="content">
+        <main class="p-6">
+            <h1 class="text-4xl font-bold text-center mt-10">Discover what others are watching</h1>
+            <p class="mt-4 text-center text-gray-700">
+                Join our community of movie lovers.Share your thoughts,discover new favourites, and connect with fellow
+                cinephiles.
+            </p>
+        </main>
     
-        <!-- Post 2 -->
         <div class="max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6">
+            <!-- Header -->
             <div class="flex items-center justify-between p-4">
                 <div class="flex items-center space-x-3">
-                    <img src="https://i.pravatar.cc/100?img=5" alt="Profile" class="w-10 h-10 rounded-full object-cover" />
+                    <img src="https://i.pravatar.cc/100?img=8" alt="Profile" class="w-10 h-10 rounded-full object-cover" />
                     <div>
-                        <h3 class="text-sm font-semibold text-gray-800">Riya Sharma</h3>
-                        <p class="text-xs text-gray-500">@riyasharma</p>
+                        <h3 class="text-sm font-semibold text-gray-800">Aarav Patel</h3>
+                        <p class="text-xs text-gray-500">@aaravp</p>
                     </div>
                 </div>
-                <p class="text-xs text-gray-500">5m ago</p>
+                <p class="text-xs text-gray-500">2h ago</p>
             </div>
     
+            <!-- Post Image -->
             <div>
-                <img src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc" alt="Post"
+                <img src="https://images.unsplash.com/photo-1606112219348-204d7d8b94ee" alt="Post"
                     class="w-full h-64 object-cover" />
             </div>
     
+            <!-- Post Content -->
             <div class="p-4">
-                <h2 class="text-lg font-bold text-gray-800 mb-2">Interstellar (2014)</h2>
+                <h2 class="text-lg font-bold text-gray-800 mb-2">Inception (2010)</h2>
+    
+                <!-- Rating -->
+                <div class="flex items-center mb-3">
+                    <!-- 4 out of 5 stars example -->
+                    <div class="flex text-yellow-400 text-lg">
+                        ★★★★☆
+                    </div>
+                    <span class="text-sm text-gray-600 ml-2">4.0 / 5</span>
+                </div>
+    
                 <p class="text-sm text-gray-600">
-                    A breathtaking journey through space and time, exploring love and survival.
+                    A thrilling sci-fi movie that explores dreams within dreams. Must watch!
                 </p>
             </div>
         </div>
+    
+    
+    
     </div>
+
 
 
     <script src="./src/script.js"></script>
