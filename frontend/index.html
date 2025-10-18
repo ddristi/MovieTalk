@@ -25,6 +25,41 @@
     <link rel="stylesheet" href="./src/styles.css">
 </head>
 
+<!-- Floating Create Review Button -->
+<button id="createReviewBtn"
+    class="fixed bottom-6 right-6 bg-indigo-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-indigo-700 transition flex items-center space-x-2">
+    <span class="text-lg font-semibold">+ Create Review</span>
+</button>
+
+<script>
+    document.getElementById("createReviewBtn").addEventListener("click", async () => {
+        try {
+            // Check if user is logged in
+            const response = await fetch("http://localhost:3000/api/v1/user/current-user", {
+                method: "GET",
+                credentials: "include",
+            });
+
+            if (!response.ok) throw new Error("Not logged in");
+
+            const result = await response.json();
+            const user = result.data;
+
+            if (user) {
+                // Logged in → go to create review page
+                window.location.href = "/createreview.html";
+            } else {
+                // Not logged in → go to signup/login
+                window.location.href = "/signup.html";
+            }
+        } catch (error) {
+            // Not logged in → redirect to login/signup
+            window.location.href = "/signup.html";
+        }
+    });
+</script>
+
+
 <body class="font-sans" class="min-h-screen" style="background:#2E1A47">
 
         <!-- Navbar -->
@@ -36,7 +71,7 @@
                 </a>
                 <div class="hidden lg:flex space-x-4">
                     <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                    <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
+                    <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
                     <a href="/signup.html" class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
                         Login / Signup
                     </a>
@@ -48,7 +83,7 @@
            <!-- Mobile Menu -->
              <div id="defaultMobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
                 <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
+                <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
                 <button class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 w-full text-left">Login /
                     Signup</button>
             </div>
@@ -73,7 +108,7 @@
                 <!-- Desktop Menu -->
                     <div class="hidden lg:flex items-center space-x-4">
                     <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                    <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a> 
+                    <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a> 
         
                     <!-- Profile Photo -->
                      <div class="relative">
@@ -85,7 +120,7 @@
                         <!-- Dropdown Menu -->
                          <div id="profileDropdown"
                             class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-                            <a href="/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                            <a href="/profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
                             <hr class="border-gray-200">
                             <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
                         </div>
@@ -99,12 +134,12 @@
             <!-- Mobile Menu -->
              <div id="loggedInMobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
                 <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                <a href="/reviews" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
+                <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
                 <div class="flex items-center space-x-2 px-3 py-2 border-t border-gray-200 mt-2">
                     <img src="https://i.pravatar.cc/100?img=12" alt="Profile" class="w-10 h-10 rounded-full object-cover">
                     <span class="text-gray-700 font-semibold">John Doe</span>
                 </div>
-                <a href="/settings" class="px-3 py-2 rounded hover:bg-gray-200">Settings</a>
+                <a href="/profile.html" class="px-3 py-2 rounded hover:bg-gray-200">Profile</a>
                 <a href="/logout" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
             </div>
         </nav>  
@@ -177,113 +212,143 @@
                 cinephiles.
             </p>
         </main>
-
-        <div id="card">
-        <!-- <div class="max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6"> -->
-            <!-- Header -->
-          <!--- <div class="flex items-center justify-between p-4">
-                <div class="flex items-center space-x-3">
-                    <img src="https://i.pravatar.cc/100?img=8" alt="Profile" class="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                        <h3 class="text-sm font-semibold text-gray-800">Aarav Patel</h3>
-                        <p class="text-xs text-gray-500">@aaravp</p>
-                    </div>
-                </div>
-                <p class="text-xs text-gray-500">2h ago</p>
-            </div> -->
-    
-            <!-- Post Image -->
-            <!-- <div>
-                <img src="https://images.unsplash.com/photo-1606112219348-204d7d8b94ee" alt="Post"
-                    class="w-full h-64 object-cover" />
-            </div> -->
-    
-            <!-- Post Content -->
-            <!-- <div class="p-4">
-                <h2 class="text-lg font-bold text-gray-800 mb-2">Inception (2010)</h2> -->
-    
-                <!-- Rating -->
-                <!-- <div class="flex items-center mb-3"> -->
-                    <!-- 4 out of 5 stars example -->
-                    <!-- <div class="flex text-yellow-400 text-lg">
-                        ★★★★☆
-                    </div>
-                    <span class="text-sm text-gray-600 ml-2">4.0 / 5</span>
-                </div>
-    
-                <p class="text-sm text-gray-600">
-                    A thrilling sci-fi movie that explores dreams within dreams. Must watch!
-                </p>
-            </div>
-        </div> -->
-    
+       <div id="card">
+<div id="sentinel"
+    class="text-center text-white text-base font-medium my-8 flex justify-center items-center h-12 w-full">
+</div>
+</div>
     </div>
     
     </div>
 
-   <script>
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const cardDiv = document.getElementById("card");
+        const defaultNavbar = document.getElementById("defaultNavbar");
+        const loggedInNavbar = document.getElementById("loggedInNavbar");
+        const profilePhoto = document.querySelector("#profileButton img");
+        const sentinel = document.getElementById("sentinel");
 
-    document.addEventListener("DOMContentLoaded", async() =>{
-        const cardDiv = document.getElementById("card")
+        let page = 1;
+        const limit = 10;
+        let loading = false;
+        let hasMore = true;
+        let user = null;
 
+        
         try {
-            const response = await fetch("http://localhost:3000/api/v1/posts/get-post",{
+            const response = await fetch("http://localhost:3000/api/v1/user/current-user", {
                 method: "GET",
-                credentials: "include"
-            })
+                credentials:"include"
+            });
 
-            if(!response.ok){
-                throw new Error("Failed to fetch posts")
+            if (!response.ok) throw new Error("Failed to fetch user");
+
+            const result = await response.json();
+            user = result.data;
+
+            if (user) {
+                defaultNavbar.style.display = "none";
+                loggedInNavbar.style.display = "block";
+                profilePhoto.src = user.profilePhoto?.url || "https://i.pravatar.cc/100?img=12";
             }
-
-            const result = await response.json()
-            const posts = result.data.posts
-
-            cardDiv.innerHTML = ""
-
-            posts.forEach((post) =>{
-                     const card = document.createElement("div");
-                card.className =
-                    "max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6";
-
-                card.innerHTML = `
-        <div class="flex items-center justify-between p-4">
-          <div class="flex items-center space-x-3">
-            <img src="${post.postedBy?.profilePhoto?.url || 'https://i.pravatar.cc/100'}" 
-                 alt="Profile" class="w-10 h-10 rounded-full object-cover" />
-            <div>
-              <h3 class="text-sm font-semibold text-gray-800">${post.postedBy?.username || "Unknown"}</h3>
-              <p class="text-xs text-gray-500">@${post.owner?.username || "user"}</p>
-            </div>
-          </div>
-          <p class="text-xs text-gray-500">${new Date(post.createdAt).toLocaleDateString()}</p>
-        </div>
-
-        <div>
-          <img src="${post.movieImage.url}" alt="Post" class="w-full h-64 object-cover" />
-        </div>
-
-        <div class="p-4">
-          <h2 class="text-lg font-bold text-gray-800 mb-2">${post.title}</h2>
-
-          <div class="flex items-center mb-3 text-yellow-400 text-lg">
-            ${"★".repeat(post.rating)}${"☆".repeat(5 - post.rating)}
-            <span class="text-sm text-gray-600 ml-2">${post.rating}.0 / 5</span>
-          </div>
-
-          <p class="text-sm text-gray-600">${post.description}</p>
-        </div>
-      `;
-
-                cardDiv.appendChild(card);
-            }); 
-            
         } catch (error) {
-               console.error("Error fetching posts:", error);
-            cardDiv.innerHTML = `<p class="text-center text-white mt-10">Failed to load posts.</p>`;   
+            console.log("Error fetching user:", error);
         }
-    })
-   </script>
+
+        
+        async function loadPosts() {
+            if (loading || !hasMore) return;
+            loading = true;
+
+            try {
+                const response = await fetch(
+                    `http://localhost:3000/api/v1/posts/get-post?page=${page}&limit=${limit}`,
+                    {
+                        method: "GET",
+                    }
+                );
+
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        hasMore = false;
+                        sentinel.textContent = "No more posts.";
+                        return;
+                    }
+                    throw new Error("Failed to fetch posts");
+                }
+
+                const result = await response.json();
+                const posts = result.data.posts;
+
+                if (!posts.length) {
+                    hasMore = false;
+                    sentinel.textContent = "No more posts.";
+                    sentinel.style.display = "flex";
+                    observer.unobserve(sentinel);
+                    return;
+                }
+
+            
+                posts.forEach((post) => {
+                    const card = document.createElement("div");
+                    card.className =
+                        "max-w-md w-full bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 mx-auto my-6";
+
+                    card.innerHTML = `
+          <div class="flex items-center justify-between p-4">
+            <div class="flex items-center space-x-3">
+              <img src="${post.postedBy?.profilePhoto?.url || 'https://i.pravatar.cc/100'}" 
+                   alt="Profile" class="w-10 h-10 rounded-full object-cover" />
+              <div>
+                <h3 class="text-sm font-semibold text-gray-800">${post.postedBy?.username || "Unknown"}</h3>
+                <p class="text-xs text-gray-500">@${post.postedBy?.username || "user"}</p>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500">${new Date(post.createdAt).toLocaleDateString()}</p>
+          </div>
+
+          <div>
+            <img src="${post.movieImage.url}" alt="Post" class="w-full h-64 object-cover" loading="lazy" />
+          </div>
+
+          <div class="p-4">
+            <h2 class="text-lg font-bold text-gray-800 mb-2">${post.title}</h2>
+
+            <div class="flex items-center mb-3 text-yellow-400 text-lg">
+              ${"★".repeat(post.rating)}${"☆".repeat(5 - post.rating)}
+              <span class="text-sm text-gray-600 ml-2">${post.rating}.0 / 5</span>
+            </div>
+
+            <p class="text-sm text-gray-600">${post.description}</p>
+          </div>
+        `;
+
+                    cardDiv.appendChild(card);
+                });
+
+                page++;
+            } catch (error) {
+                console.error("Error fetching posts:", error);
+                sentinel.textContent = "Error loading posts.";
+            } finally {
+                loading = false;
+            }
+        }
+
+        
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMore && !loading) {
+                loadPosts();
+            }
+        });
+
+        observer.observe(sentinel);
+
+        loadPosts();
+    });
+</script>
+
 
     <script src="./src/script.js"></script>
 </body>

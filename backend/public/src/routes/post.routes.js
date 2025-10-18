@@ -9,9 +9,11 @@ import {createPost,
 } from "../controllers/post.controller.js"
 
 const router = Router()
+
+router.route("/get-post").get(getAllPost)
 router.use(verifyJWT)
 router.route("/create-post").post(upload.single("movieImage"), createPost)
-router.route("/get-post").get(getAllPost)
+
 
 router.route("/post/:id").get(getPostbyId)
 router.route("/post/:id/delete-post").delete(deletePost)
