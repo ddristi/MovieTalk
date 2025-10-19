@@ -192,20 +192,18 @@ const updateProfile = asyncHandler(async(req, res) =>{
             email
         }
     )
-        
-    if(existingUser){
+        if(existingUser){
         throw new ApiError(400,"Email already exists")
     }
-
 }
 
 
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
-            $set:{
-                fullName: req.user?.fullName,
-                email: email
+            $set: {
+                ...(fullName && { fullName }),
+                ...(email && { email })
             }
         },
         {

@@ -36,7 +36,7 @@
                         class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                         <a href="/profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
                         <hr class="border-gray-200">
-                        <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                        <a id="logoutButton" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                 <img src="https://i.pravatar.cc/100?img=12" alt="Profile" class="w-10 h-10 rounded-full object-cover">
                 <span class="text-gray-700 font-semibold">John Doe</span>
             </div>
-            <a href="/logout" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
+            <a id="logoutButton" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
         </div>
     </nav>
 
@@ -72,6 +72,67 @@
             }
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const loggedInNavbar = document.getElementById("loggedInNavbar");
+            const profilePhoto = document.querySelector("#profileButton img")
+
+            let user = null;
+
+            try {
+                const response = await fetch("http://localhost:3000/api/v1/user/current-user", {
+                    method: "GET",
+                    credentials: "include",
+                });
+
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const result = await response.json();
+                user = result.data;
+
+                if (user) {
+                    loggedInNavbar.style.display = "block";
+
+                    profilePhoto.src = user.profilePhoto.url || "https://i.pravatar.cc/100?img=12";
+
+
+                }
+            } catch (error) {
+                console.log("Error fetching user", error);
+
+            }
+            
+             const logoutBtn = document.getElementById("logoutButton")
+            logoutBtn.addEventListener("click", async (e) => {
+                e.preventDefault();
+
+                try {
+                    const res = await fetch("http://localhost:3000/api/v1/user/logout", {
+                        method: "POST",
+                        credentials: "include",
+                    });
+
+                    if (!res.ok) throw new Error("Logout failed");
+
+                    const data = await res.json();
+                    console.log(data);
+
+                    alert(data.message || "Logged out successfully");
+
+
+                    window.location.href = "/signup.html";
+
+                } catch (err) {
+                    console.error("Logout error:", err);
+                    alert("Error logging out. Try again.");
+                }
+            });
+            
+        })
+    </script>
+
 
     <!-- Create Review Form -->
     <section class="flex justify-center items-center px-4 py-16 min-h-[calc(100vh-120px)]">
@@ -141,7 +202,64 @@
             });
         });
     </script>
+  
 
+  <script>
+
+    const createReviewForm = document.getElementById("createReviewForm")
+
+    createReviewForm.addEventListener("submit", async(e) =>{
+        e.preventDefault()
+
+        const title = document.getElementById("title").value.trim()
+        const description = document.getElementById("description").value.trim()
+        const movieImage = document.getElementById("movieImage").files[0]
+        const rating = document.getElementById("ratingValue").value  
+
+            if (!title || !description || rating === "0") {
+                alert("Title, description, and rating are required!")
+                return
+            }
+
+            if (isNaN(rating) || rating < 1 || rating > 5) {
+                alert("Rating must be between 1 and 5")
+                return
+            }
+
+            const formData = new FormData()
+            formData.append("title", title)
+            formData.append("description", description)
+            formData.append("rating", rating)
+            formData.append("movieImage", movieImage)
+
+            try {
+                const response = await fetch("http://localhost:3000/api/v1/posts/create-post", {
+                    method: "POST",
+                    credentials: "include",
+                    body: formData
+                })
+
+
+
+                if (!response.ok) {
+                    throw new Error("Error creating review")
+                }
+
+                const result = await response.json()
+                alert(result.message || "Review added successfully")
+                createReviewForm.reset()
+                window.location.href = "/myreview.html"
+            } catch (error) {
+                console.error(error)
+                alert("Something went wrong while posting review")
+            }
+        })
+
+        </script>
+
+
+        
+</script>
 </body>
 
 </html>

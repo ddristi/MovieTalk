@@ -16,6 +16,9 @@ const createPost =  asyncHandler(async(req,res) =>{
         throw new ApiError(400, "All fields are required")
     }
     
+    if(!req.file){
+        throw new ApiError(400, "Movie image is required")
+    }
     const imageLocalPath = req.file?.path
 
     const movieImagePath = await uploadOnCloudinary(imageLocalPath)
@@ -28,7 +31,7 @@ const createPost =  asyncHandler(async(req,res) =>{
     const post = await Post.create({
         title,
         description,
-        rating,
+        rating: Number(rating),
         movieImage : movieImage,
         postedBy:req.user?._id
     })
@@ -84,6 +87,7 @@ const updatePost = asyncHandler(async(req,res) =>{
 })
 
 const deletePost = asyncHandler(async(req,res) =>{
+
 
     const post = await Post.findById(req.params.id)
     
@@ -183,9 +187,29 @@ const getPostbyId = asyncHandler(async(req,res) =>{
     .json(new ApiResponse(200, {post}, "Post fetched successfully"))
 })
 
+const getMyPosts = asyncHandler(async (req, res) => {
+    const userId = req.user?._id;
+
+    if (!userId) {
+        throw new ApiError(401, "User not authenticated");
+    }
+
+    const myPosts = await Post.find({ postedBy: userId }).sort({ createdAt: -1 });
+
+    console.log("Current user:", req.user);
+    console.log("Fetched posts:", myPosts);
+
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {posts: myPosts}, "User's posts fetched successfully"));
+});
+
+
 export {createPost,
         updatePost,
         deletePost,
         getAllPost,
-        getPostbyId
+        getPostbyId,
+        getMyPosts
 }

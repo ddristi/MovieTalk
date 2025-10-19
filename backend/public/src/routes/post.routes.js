@@ -5,7 +5,8 @@ import {createPost,
         updatePost,
         deletePost,
         getAllPost,
-        getPostbyId
+        getPostbyId,
+        getMyPosts
 } from "../controllers/post.controller.js"
 
 const router = Router()
@@ -18,5 +19,6 @@ router.route("/create-post").post(upload.single("movieImage"), createPost)
 router.route("/post/:id").get(getPostbyId)
 router.route("/post/:id/delete-post").delete(deletePost)
 router.route("/post/:id/update-post").patch(updatePost)
+router.route("/my-posts").get(verifyJWT,getMyPosts)
 
 export default router

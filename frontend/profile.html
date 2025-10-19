@@ -33,7 +33,7 @@
                         class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                         <a href="/profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
                         <hr class="border-gray-200">
-                        <a href="/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                        <a id="logoutButton" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
             <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
             <a href="/profile.html" class="px-3 py-2 rounded hover:bg-gray-200">Profile</a>
-            <a href="/logout" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
+            <a id="logoutButton" class="px-3 py-2 rounded hover:bg-gray-200">Logout</a>
         </div>
     </nav>
 
@@ -64,6 +64,67 @@
             }
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const loggedInNavbar = document.getElementById("loggedInNavbar");
+            const profilePhoto = document.querySelector("#profileButton img")
+
+            let user = null;
+
+            try {
+                const response = await fetch("http://localhost:3000/api/v1/user/current-user", {
+                    method: "GET",
+                    credentials: "include",
+                });
+
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const result = await response.json();
+                user = result.data;
+
+                if (user) {
+                    loggedInNavbar.style.display = "block";
+
+                    profilePhoto.src = user.profilePhoto.url || "https://i.pravatar.cc/100?img=12";
+
+
+                }
+            } catch (error) {
+                console.log("Error fetching user", error);
+
+            }
+            
+             const logoutBtn = document.getElementById("logoutButton")
+            logoutBtn.addEventListener("click", async (e) => {
+                e.preventDefault();
+
+                try {
+                    const res = await fetch("http://localhost:3000/api/v1/user/logout", {
+                        method: "POST",
+                        credentials: "include",
+                    });
+
+                    if (!res.ok) throw new Error("Logout failed");
+
+                    const data = await res.json();
+                    console.log(data);
+
+                    alert(data.message || "Logged out successfully");
+
+
+                    window.location.href = "/signup.html";
+
+                } catch (err) {
+                    console.error("Logout error:", err);
+                    alert("Error logging out. Try again.");
+                }
+            });
+            
+        })
+    </script>
+
 
     <!-- Profile Section -->
     <section class="max-w-3xl mx-auto mt-16 bg-white rounded-lg shadow-md p-8">
@@ -160,14 +221,160 @@
         const uploadPhoto = document.getElementById('uploadPhoto');
         const profilePhoto = document.getElementById('profilePhoto');
 
-        uploadPhoto.addEventListener('change', (e) => {
+        uploadPhoto.addEventListener('change', async(e) => {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => profilePhoto.src = e.target.result;
-                reader.readAsDataURL(file);
+            if (!file) return;
+            
+            const formData = new FormData()
+            formData.append("profilePhoto", file);
+        
+        
+        try {
+                const response = await fetch("http://localhost:3000/api/v1/user/profile-photo", {
+                method: "PATCH",  
+                credentials: "include", 
+                body: formData
+            });
+
+            if (!response.ok) throw new Error("Failed to update profile photo");
+
+            const data = await response.json();
+            const updatedUser = data.data;
+
+            
+            profilePhoto.src = updatedUser.profilePhoto.url || "https://i.pravatar.cc/100";
+
+            alert("Profile photo updated successfully!");
+        } catch (error) {
+            console.error(error);
+            alert("Error updating profile photo."); 
+        }
+    });
+        
+        const updateProfile = document.getElementById("updateProfileForm")
+
+        updateProfile.addEventListener("submit", async(e) => {
+            e.preventDefault()
+
+            const fullName = document.getElementById("fullName").value.trim()
+            const email = document.getElementById("email").value.trim()
+
+            if(!fullName || !email){
+                alert("Atleast one field is required")
             }
-        });
+
+            try {
+                const response = await fetch("http://localhost:3000/api/v1/user/update-profile",{
+                    method :"PATCH",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ fullName, email })
+                })
+
+                if(!response.ok){
+                    throw new Error("Failed to update profile")
+                }
+
+                const result = await response.json()
+                const updatedUser = result.data
+
+                document.querySelector("h2").textContent = updatedUser.fullName;
+                document.querySelector("p.text-gray-500").textContent = "@" + updatedUser.username;
+                document.querySelector("p.text-gray-600").textContent = "Email: " + updatedUser.email;
+
+                alert("profile details updated successfully")
+            } catch (error) {
+                console.error(error);
+                alert("Error updating profile");
+            }
+        })
+        
+
+        const updatePassword = document.getElementById("changePasswordForm")
+
+        updatePassword.addEventListener("submit", async(e) =>{
+            e.preventDefault()
+
+            const oldPassword = document.getElementById("currentPassword").value
+            const newPassword = document.getElementById("newPassword").value
+            const confirmPassword = document.getElementById("confirmPassword").value
+
+            if(newPassword !== confirmPassword){
+                alert("Confirm new password correctly")
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:3000/api/v1/user/change-password",{
+                    method: "PATCH",
+                    credentials:"include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body:JSON.stringify({newPassword,oldPassword})
+                })
+               
+                if(!response.ok){
+                    throw new Error("Password upadate failed")
+                }
+
+                const result = await response.json()
+
+                alert(result.message || "Password updated successfully")
+            } catch (error) {
+                console.error(error);
+                alert("Error updating password");
+            }
+
+        })
+
+        document.addEventListener("DOMContentLoaded", async() =>{
+
+            try {
+                const response = await fetch("http://localhost:3000/api/v1/user/current-user",{
+                   credentials:"include",
+                   method: "GET"
+                });
+
+                if(!response.ok){
+                    window.location.href = "/signup.html";
+                    return;
+                }
+
+
+                const userData = await response.json();
+                const currentUser = userData.data;
+                
+
+                const profileResponse = await fetch(`http://localhost:3000/api/v1/user/c/${currentUser.username}`, {
+                    credentials: "include",
+                    method: "GET"
+                });           
+
+                if (!profileResponse.ok) {
+                    throw new Error("Failed to fetch profile data");
+                }
+
+                const profileData = await profileResponse.json();
+                const user = profileData.data;
+
+                document.getElementById("profilePhoto").src = user.profilePhoto.url || "https://i.pravatar.cc/100";
+                document.getElementById("fullName").value = user.fullName || "";
+                document.getElementById("username").value = user.username || "";
+                document.getElementById("email").value = user.email || "";
+                document.querySelector("h2").textContent = user.fullName || "User";
+                document.querySelector("p.text-gray-500").textContent = "@" + (user.username || "");
+                document.querySelector("p.text-gray-600").textContent = "Email: " + (user.email || "");
+                document.querySelector("p.text-gray-700 span").textContent = user.postCount || 0;
+
+            } catch (error) {
+                console.error("Error fetching user:", error);
+                alert("Session expired or not logged in.");
+                window.location.href = "/signup.html";
+            }
+        })
     </script>
 
 </body>
