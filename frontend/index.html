@@ -22,7 +22,213 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="./src/styles.css">
+
+    <style>
+        /* === Global Styling === */
+body {
+     background: radial-gradient(circle at top left, #080310 0%, #141431 100%); 
+    /* background-color: #121212;  */
+    color: #f8f8ff;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* === Navbar === */
+/* Navbar container */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(20, 20, 20, 0.5); /* Dark like Letterboxd */
+            padding: 10px 20px;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px); /* frosted glass effect */
+        }
+
+        /* Logo link hover override */
+       #defaultNavbar .logo-link {
+            padding: 0;
+            color: #f5c518; /* initial color */
+            background: transparent;
+        }
+
+        #defaultNavbar .logo-link:hover {
+           background: transparent; /* no background */
+           color: #f5c518; /* you can also use different hover color */
+        }
+
+
+        /* Logo */
+        .logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Navbar links */
+        #defaultNavbar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #defaultNavbar  a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+         #loginbtn {
+            border: 1px solid #f5c518;
+            color: #f5c518;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        #loginbtn:hover {
+            background-color: #f5c518;
+            color: #141414;
+        }
+
+        /* Optional: user profile pic */
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-left: 15px;
+            border: 1px solid #fff;
+        }
+
+/* === Hero Section (Main Header Text) === */
+main h1 {
+    font-size: 5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(90deg, #a855f7, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+main p {
+    color: #d1c4e9;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-size: 1.5rem;
+}
+
+/* === Floating Button === */
+#createReviewBtn {
+    background: linear-gradient(90deg, #a855f7, #f59e0b);
+    box-shadow: 0 8px 16px rgba(168, 85, 247, 0.3);
+    transition: all 0.3s ease;
+}
+
+#createReviewBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(245, 158, 11, 0.4);
+}
+
+/* === Cards (Movie Posts) === */
+#card .max-w-md {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#card .max-w-md:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+}
+
+/* Card Titles and Text */
+#card h2 {
+    color: #fef3c7;
+    font-weight: 700;
+}
+
+#card p.text-sm.text-gray-600 {
+    color: #d1c4e9 !important;
+}
+
+/* === Sentinel (No more posts text) === */
+#sentinel {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+}
+
+/* === Profile Dropdown Menu === */
+#profileDropdown {
+    background: rgba(30, 15, 45, 0.95);
+    color: #f3e8ff;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+#profileDropdown a:hover {
+    background: rgba(168, 85, 247, 0.2);
+}
+
+/* === Scrollbar (for desktop browsers) === */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #9333ea, #f59e0b);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(20, 10, 30, 0.8);
+}
+
+/* === Animations / Glow Effects === */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px #9333ea, 0 0 10px #f59e0b;
+    }
+
+    50% {
+        box-shadow: 0 0 20px #fbbf24, 0 0 40px #a855f7;
+    }
+
+    100% {
+        box-shadow: 0 0 5px #9333ea, 0 0 10px #f59e0b;
+    }
+}
+
+.glow {
+    animation: glow 3s ease-in-out infinite;
+}
+
+#createReviewBtn {
+    position: fixed;       /* Already fixed */
+    bottom: 20px;          /* Distance from bottom */
+    right: 20px;           /* Distance from right */
+    z-index: 50;           /* Make sure it's above other content */
+}
+
+    </style>
+    <link rel="stylesheet" href="/src/styles.css">
 </head>
 
 <!-- Floating Create Review Button -->
@@ -60,34 +266,40 @@
 </script>
 
 
-<body class="font-sans" class="min-h-screen" style="background:#2E1A47">
+<body class="font-sans" class="min-h-screen">
 
         <!-- Navbar -->
-         <nav id="defaultNavbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300">
-            <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
-                <a href="#" class="flex items-center space-x-2">
-                    <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" class="w-8 h-8">
-                    <span class="font-bold text-black">MovieTalk</span>
+        <nav id="defaultNavbar" class="sticky top-0 z-50 w-full bg-black/50 backdrop-blur-md px-4 py-2">
+            <div class="max-w-7xl mx-auto flex items-center w-full">
+                <!-- Left: Logo + MovieTalk -->
+                <a href="/" class="flex items-center space-x-2">
+                     <img src="https://www.svgrepo.com/show/285737/movie.svg" alt="logo" class="w-8 h-8 ">
+                    <span class="font-bold text-yellow-400 text-2xl">MovieTalk</span>
                 </a>
-                <div class="hidden lg:flex space-x-4">
-                    <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
-                    <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
-                    <a href="/signup.html" class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
-                        Login / Signup
-                    </a>
-
+        
+                <!-- Right: Menu items -->
+                <div class="ml-auto hidden lg:flex items-center space-x-4">
+                    <a href="/" class="px-3 py-2 rounded hover:bg-gray-700 hover:text-yellow-400 transition">Home</a>
+                    <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-700 hover:text-yellow-400 transition">My
+                        Reviews</a>
+                    <a id="loginbtn" href="/signup.html"
+                        class="border border-yellow-400 px-3 py-2 rounded hover:bg-yellow-400 hover:text-gray-900 transition">Login
+                        / Signup</a>
                 </div>
-                <button id="defaultMobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200">☰</button>
+        
+                <!-- Mobile Menu Button -->
+                <button id="defaultMobileMenuButton" class="lg:hidden px-3 py-2 rounded bg-gray-200 ml-auto">☰</button>
             </div>
         
-           <!-- Mobile Menu -->
-             <div id="defaultMobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
+            <!-- Mobile Menu -->
+            <div id="defaultMobileMenu" class="hidden flex-col px-4 py-2 space-y-2 bg-white shadow-md lg:hidden">
                 <a href="/" class="px-3 py-2 rounded hover:bg-gray-200">Home</a>
                 <a href="/myreview.html" class="px-3 py-2 rounded hover:bg-gray-200">My Reviews</a>
                 <button class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 w-full text-left">Login /
                     Signup</button>
             </div>
-        </nav>  
+        </nav>
+
 
         <script>
                     const defaultbutton = document.getElementById('defaultMobileMenuButton');
@@ -101,8 +313,8 @@
         <nav id="loggedInNavbar" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-md transition-all duration-300" style="display:none;">
             <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
                  <a href="#" class="flex items-center space-x-2">
-                    <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" class="w-8 h-8">
-                    <span class="font-bold text-black">MovieTalk</span>
+                     <img src="https://www.flaticon.com/free-icons/achievement" alt="logo" class="w-8 h-8"> 
+                    <span class="font-bold text-black">MovieTalk</span> 
                 </a>
          
                 <!-- Desktop Menu -->
@@ -232,17 +444,17 @@
 
     <div id="content">
         <main class="p-6">
-            <h1 class="text-4xl font-bold text-center text-white mt-10">Discover what others are watching</h1>
-            <p class="mt-4 text-center text-white">
+            <h1 class=" font-bold text-center text-white mt-10">Discover what others are watching</h1>
+            <p class="mt-4 text-center text-gray-300">
                 Join our community of movie lovers.Share your thoughts,discover new favourites, and connect with fellow
                 cinephiles.
             </p>
         </main>
-       <div id="card">
-<div id="sentinel"
-    class="text-center text-white text-base font-medium my-8 flex justify-center items-center h-12 w-full">
-</div>
-</div>
+    <div id="card" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+    </div>
+
+    <div id="sentinel"
+        class="text-center text-white text-base font-medium my-8 flex justify-center items-center h-12 w-full">
     </div>
     
     </div>
@@ -327,11 +539,11 @@
               <img src="${post.postedBy?.profilePhoto?.url || 'https://i.pravatar.cc/100'}" 
                    alt="Profile" class="w-10 h-10 rounded-full object-cover" />
               <div>
-                <h3 class="text-sm font-semibold text-gray-800">${post.postedBy?.username || "Unknown"}</h3>
-                <p class="text-xs text-gray-500">@${post.postedBy?.username || "user"}</p>
+                <h3 class="text-sm font-semibold text-gray-300">${post.postedBy?.username || "Unknown"}</h3>
+                <p class="text-xs text-gray-400">@${post.postedBy?.username || "user"}</p>
               </div>
             </div>
-            <p class="text-xs text-gray-500">${new Date(post.createdAt).toLocaleDateString()}</p>
+            <p class="text-xs text-gray-400">${new Date(post.createdAt).toLocaleDateString()}</p>
           </div>
 
           <div>
@@ -376,7 +588,7 @@
 </script>
 
 
-    <script src="./src/script.js"></script>
+    <script src="/src/script.js"></script>
 </body>
 
 </html>

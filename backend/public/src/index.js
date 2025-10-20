@@ -17,6 +17,7 @@ dotenv.config({
 })
 
 
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, '../../../frontend/index.html'));
 });
